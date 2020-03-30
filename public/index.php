@@ -7,6 +7,17 @@
  * @author   Taylor Otwell <taylor@laravel.com>
  */
 
+if(isset($_SERVER['HTTP_CF_VISITOR'])){
+    $scheme = json_decode($_SERVER['HTTP_CF_VISITOR'])->scheme;
+    if($scheme == 'https'){
+        $_SERVER['HTTP_X_FORWARDED_PORT'] = 443;
+        $_SERVER['HEADER_X_FORWARDED_PORT'] = 443;
+        $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
+        $_SERVER['HEADER_X_FORWARDED_PROTO'] = 'https';
+        $_SERVER['HTTPS'] = 'on';
+    }
+}
+
 define('LARAVEL_START', microtime(true));
 
 /*
