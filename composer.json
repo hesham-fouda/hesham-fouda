@@ -71,7 +71,10 @@
             "@php artisan package:discover --ansi"
         ],
         "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "@php -r \"file_exists('.env') || copy('.env.heroku', '.env');\""
+        ],
+        "post-install-cmd": [
+            "php -r \"file_exists('.env') || copy('.env.heroku', '.env');\""
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
