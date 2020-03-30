@@ -19,8 +19,8 @@ class CreateCoAccountSubscriptionsTable extends Migration
             $table->unsignedInteger('max_devices')->default(0);
             $table->date('start_at')->nullable();
             $table->date('expire_at')->nullable();
-            $table->timestampsTz();
-            $table->softDeletesTz();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
