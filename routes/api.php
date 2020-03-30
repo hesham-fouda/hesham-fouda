@@ -41,11 +41,11 @@ Route::get('ipv4', function (Request $request) {
             'time_zone' => $record->location->timeZone,
         ];
     } catch (Exception $exception) {
-        dd(
+        /*dd(
             $exception,
             $request,
             $request->ips()
-        );
+        );*/
         return [
             'ip' => null,
             'type' => null,
