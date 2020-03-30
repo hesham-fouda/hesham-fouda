@@ -43,6 +43,7 @@ Route::get('ipv4', function (Request $request) {
     } catch (Exception $exception) {
         dd(
             $exception,
+            $request,
             $request->ips()
         );
         return [
