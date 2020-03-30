@@ -83,7 +83,7 @@
                 <div class="title m-b-md">
                     Under Construction
                 </div>
-
+                {{--<h1>{{now()/*->timezone('Africa/cairo')*/->toDayDateTimeString()}}</h1>--}}
                 {{--<div class="links">
                     <a href="https://laravel.com/docs">Docs</a>
                     <a href="https://laracasts.com">Laracasts</a>
@@ -96,5 +96,14 @@
                 </div>--}}
             </div>
         </div>
+        {{--<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.14/moment-timezone-with-data-2012-2022.min.js"></script>
+        <script>
+            $(function () {
+                // guess user timezone
+                $('#tz').val(moment.tz.guess())
+            })
+        </script>--}}
     </body>
 </html>

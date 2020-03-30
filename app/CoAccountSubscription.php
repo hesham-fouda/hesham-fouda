@@ -2,9 +2,22 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
+/**
+ * Class CoAccountSubscription
+ * @package App
+ * @property int id
+ * @property int account_id
+ * @property int max_devices
+ * @property Carbon start_at
+ * @property Carbon expire_at
+ * @property Collection devices
+ * @property CoAccount account
+ */
 class CoAccountSubscription extends Model
 {
     use SoftDeletes;

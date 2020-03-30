@@ -5,12 +5,21 @@ namespace App\Http\Controllers\Api;
 use App\CoAccount;
 use App\CoAccountSubscriptionDevice;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
+/**
+ * Class CoAccountAuthController
+ * @package App\Http\Controllers\Api
+ */
 class CoAccountAuthController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function CoLogin(Request $request)
     {
         /** @var Validator $validator * */
@@ -44,12 +53,78 @@ class CoAccountAuthController extends Controller
         }
     }
 
-    function CoAccountResponse(Request $request, CoAccount $coAccount, bool $newToken = true)
+    /**
+     * Handle check login request to the application.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return array|\Illuminate\Http\JsonResponse
+     */
+    public function CoLoginCheck(Request $request)
     {
-        if (is_null($coAccount->subscription) || (!is_null($coAccount->subscription->expire_at) && now()->greaterThan($coAccount->subscription->expire_at)))
+        /** @var Validator $validator * */
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return \response()->json(['errors' => $validator->errors()], 400);
+        } else if (!$request->hasCookie('hwd')) {
             return \response()->json([
                 'errors' => [
-                    'phone' => ['مفيش عندك إشتراك تواصل مع الدعم الفنى .']
+                    'phone' => ['حصل خطأ أثناء التحقق من تسجيل الدخول !']
+                ]
+            ], 400);
+        } else {
+            try {
+                $token = explode(':', $request->post('token'));
+                $coAccount = CoAccount::query()->where('id', $token[0])
+                    ->whereHas('devices', function (Builder $query) use ($token, $request) {
+                        $query->where('token', $token[1])->where('device_id', $request->cookie('hwd'));
+                    })->limit(1)->get();
+
+
+                /*dd(
+                    $coAccount,
+                    $request->cookie('hwd')
+                );*/
+                if ($coAccount->count() > 0) {
+                    $coAccount = $coAccount->first();
+                    return $this->CoAccountResponse($request, $coAccount, false);
+                } else
+                    return \response()->json([
+                        'errors' => [
+                            'phone' => ['خطأ !']
+                        ]
+                    ], 400);
+            } catch (\Exception $ex) {
+                return \response()->json([
+                    'errors' => [
+                        $ex->getMessage()
+                    ]
+                ], 400);
+            }
+
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @param CoAccount $coAccount
+     * @param bool $newToken
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function CoAccountResponse(Request $request, CoAccount $coAccount, bool $newToken = true)
+    {
+        if (is_null($coAccount->subscription))
+            return \response()->json([
+                'errors' => [
+                    'phone' => ['مفيش عندك إشتراك كلم الدعم الفنى .']
+                ]
+            ], 400);
+
+        if ((!is_null($coAccount->subscription->expire_at) && now()->startOfDay()->greaterThan($coAccount->subscription->expire_at)))
+            return \response()->json([
+                'errors' => [
+                    'phone' => ['إشتراكك خلصان كلم الدعم الفنى .']
                 ]
             ], 400);
 
@@ -60,12 +135,19 @@ class CoAccountAuthController extends Controller
                 ]
             ], 400);
 
-        $device = $coAccount->subscription->devices->filter(function(CoAccountSubscriptionDevice $device) use($request) {
+        /** @var CoAccountSubscriptionDevice $device * */
+        $device = $coAccount->subscription->devices->filter(function (CoAccountSubscriptionDevice $device) use ($request) {
             return $device->device_id === $request->cookie('hwd');
         })->first();
 
-        if (is_null($device))
-        {
+        if (is_null($device)) {
+            if ($coAccount->subscription->max_devices == $coAccount->subscription->devices->count())
+                return \response()->json([
+                    'errors' => [
+                        'phone' => ['وصلت لأقصى حد فى عدد الأجهزة مينقعش تستعمل أجهزة أكتر من كدا !']
+                    ]
+                ], 400);
+
             $coAccount->subscription->devices()->create([
                 'device_id' => $request->cookie('hwd'),
                 'device_name' => $request->cookie('dv_name'),
@@ -74,7 +156,7 @@ class CoAccountAuthController extends Controller
                 'token' => Str::random(64),
             ]);
             $coAccount->subscription->refresh();
-            $device = $coAccount->subscription->devices->filter(function(CoAccountSubscriptionDevice $device) use($request) {
+            $device = $coAccount->subscription->devices->filter(function (CoAccountSubscriptionDevice $device) use ($request) {
                 return $device->device_id === $request->cookie('hwd');
             })->first();
         } else {
@@ -82,9 +164,9 @@ class CoAccountAuthController extends Controller
                 'last_activity' => now(),
                 'device_name' => $request->cookie('dv_name'),
             ];
-            if(!in_array($request->ip(), ($device->ips ?? [])))
+            if (!in_array($request->ip(), ($device->ips ?? [])))
                 $updateData['ips'] = array_merge(($device->ips ?? []) + [$request->ip()]);
-            if($newToken)
+            if ($newToken)
                 $updateData['token'] = Str::random(64);
 
             $device->update($updateData);

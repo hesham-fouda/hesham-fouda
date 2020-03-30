@@ -20,9 +20,9 @@ class CreateCoAccountSubscriptionDevicesTable extends Migration
             $table->string('device_name');
             $table->string('token');
             $table->json('ips');
-            $table->dateTime('last_activity');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->dateTimeTz('last_activity');
+            $table->timestampsTz();
+            $table->softDeletesTz();
         });
     }
 

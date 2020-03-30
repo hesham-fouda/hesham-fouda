@@ -18,8 +18,8 @@ class CreateCoAccountsTable extends Migration
             $table->string('full_name')->nullable();
             $table->string('phone')->unique();
             $table->string('password');
-            $table->timestamps();
-            $table->softDeletes();
+            $table->timestampsTz();
+            $table->softDeletesTz();
         });
     }
 

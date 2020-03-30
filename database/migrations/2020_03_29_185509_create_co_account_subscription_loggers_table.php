@@ -17,7 +17,7 @@ class CreateCoAccountSubscriptionLoggersTable extends Migration
             $table->id();
             $table->unsignedInteger('subscription_id');
             $table->string('note');
-            $table->dateTime('created_at');
+            $table->timestampTz('created_at')->nullable();
         });
     }
 

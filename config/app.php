@@ -180,7 +180,7 @@ return [
         OwenIt\Auditing\AuditingServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
-
+        \Torann\GeoIP\GeoIPServiceProvider::class,
 
     ],
 
@@ -197,6 +197,7 @@ return [
 
     'aliases' => [
 
+        'GeoIP' => \Torann\GeoIP\Facades\GeoIP::class,
         'Captcha' => Mews\Captcha\Facades\Captcha::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
