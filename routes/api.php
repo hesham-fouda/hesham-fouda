@@ -19,10 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
+Route::get('ping', function (Request $request) { return 'pong'; });
 Route::get('ipv4', function (Request $request) {
     try {
         $reader = new \GeoIp2\Database\Reader(storage_path('app/GeoLite2-City.mmdb'));
-        $record = $reader->city($request->ip());
+        $record = $reader->city($request);
         return [
             'ip' => $request->ip(),
             'type' => 'ipv4',
@@ -40,7 +41,10 @@ Route::get('ipv4', function (Request $request) {
             'time_zone' => $record->location->timeZone,
         ];
     } catch (Exception $exception) {
-        dd($exception);
+        dd(
+            $exception,
+            $request->ips()
+        );
         return [
             'ip' => null,
             'type' => null,
