@@ -23,7 +23,7 @@ Route::get('ping', function (Request $request) { return 'pong'; });
 Route::get('ipv4', function (Request $request) {
     try {
         $reader = new \GeoIp2\Database\Reader(storage_path('app/GeoLite2-City.mmdb'));
-        $record = $reader->city($request);
+        $record = $reader->city($request->ip());
         return [
             'ip' => $request->ip(),
             'type' => 'ipv4',
