@@ -165,7 +165,7 @@ class CoAccountAuthController extends Controller
                 'device_name' => $request->cookie('dv_name'),
             ];
             if (!in_array($request->ip(), ($device->ips ?? [])))
-                $updateData['ips'] = array_merge(($device->ips ?? []) + [$request->ip()]);
+                $updateData['ips'] = array_merge(($device->ips ?? []), [$request->ip()]);
             if ($newToken)
                 $updateData['token'] = Str::random(64);
 
