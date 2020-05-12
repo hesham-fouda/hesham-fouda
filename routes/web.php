@@ -53,18 +53,25 @@ use GeoIp2\Database\Reader;
 //});
 
 Route::get('x-logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-Route::get('{slug?}', function () {
-    return view('welcome');
-})->where('slug', '^(?!api).*$');
-//->where('slug', '[\/\w\.-]*');
 
-Route::get(
-    '/', function () {
+Auth::routes(['register' => false]);
+Route::prefix('co_accounts')->namespace('CoAccounts')->name('co_accounts.')->group(function(){
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::post('/account/store', 'AccountController@store')->name('account.store');
+
+    Route::prefix('account/{CoAccount}')->name('account.')->group(function(){
+        Route::get('view', 'AccountController@view')->name('view');
+        Route::post('subscription/store', 'AccountController@subscriptionStore')->name('subscription.store');
+        Route::post('subscription/update', 'AccountController@subscriptionUpdate')->name('subscription.update');
+    });
+});
+
+Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes(['register' => false]);
-
+//->where('slug', '[\/\w\.-]*');
+Route::get('{slug?}', function () {
+    return view('welcome');
+})->where('slug', '^(?!api).*$');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('x-logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
-
