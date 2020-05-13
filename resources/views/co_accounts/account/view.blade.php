@@ -92,60 +92,57 @@
                                     </button>
                                 </form>
                             @endif
-                            <form action="{{route('co_accounts.account.subscription.update', $account)}}"
-                                  method="post">
-                                {!! csrf_field() !!}
+
+                            @if($devices->count() > 0)
                                 <hr>
                                 <h3>الأجهزة المرتبطة بالإشتراك</h3>
-                                @if($devices->count() > 0)
-                                    <div class="table-responsive">
-                                        <table class="table table-striped">
-                                            <thead>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">إسم الجهاز</th>
+                                            <th scope="col">أخر أى بى</th>
+                                            <th scope="col">أخر نشاط</th>
+                                            <th scope="col">إجراءات</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($devices as $device)
                                             <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">إسم الجهاز</th>
-                                                <th scope="col">أخر أى بى</th>
-                                                <th scope="col">أخر نشاط</th>
-                                                <th scope="col">إجراءات</th>
+                                                <th scope="row">{{$loop->index + 1}}</th>
+                                                <th>{{$device->device_name}}</th>
+                                                @if($device->trashed())
+                                                    <th colspan="3">
+                                                        <center>
+                                                            محذوف في :
+                                                            {{$device->deleted_at->toDayDateTimeString()}}
+                                                        </center>
+                                                    </th>
+                                                @else
+                                                    <th>{{count($device->ips) > 0 ? $device->ips[count($device->ips) - 1] : 'غير معروف'}}</th>
+                                                    <th class="text text-{{ now()->lessThan($device->last_activity->addMinutes(5)) ? 'success' : 'danger'}}">
+                                                        {{$device->last_activity ? $device->last_activity->toDayDateTimeString() : 'غير معروف'}}
+                                                    </th>
+                                                    <th>
+                                                        <a type="submit" class="btn btn-danger"
+                                                           data-toggle="confirmation"
+                                                           href="{{URL::signedRoute('co_accounts.account.subscription.device.delete', [$account, $account->subscription, $device])}}"
+                                                           data-btn-ok-label="تاكيد" data-btn-ok-class="btn-danger"
+                                                           {{--data-btn-ok-icon-class="material-icons" data-btn-ok-icon-content="check"--}}
+                                                           data-btn-cancel-label="لا"
+                                                           data-btn-cancel-class="btn-secondary"
+                                                           {{--data-btn-cancel-icon-class="material-icons" data-btn-cancel-icon-content="close"--}}
+                                                           data-title="تاكيد الحذف ؟"
+                                                           data-content="تاكيد حذف الجهاز ؟">حذف</a>
+                                                    </th>
+                                                @endif
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($devices as $device)
-                                                <tr>
-                                                    <th scope="row">{{$loop->index + 1}}</th>
-                                                    <th>{{$device->device_name}}</th>
-                                                    @if($device->trashed())
-                                                        <th colspan="3">
-                                                            <center>
-                                                                محذوف في :
-                                                                {{$device->deleted_at->toDayDateTimeString()}}
-                                                            </center>
-                                                        </th>
-                                                    @else
-                                                        <th>{{count($device->ips) > 0 ? $device->ips[count($device->ips) - 1] : 'غير معروف'}}</th>
-                                                        <th class="text text-{{ now()->lessThan($device->last_activity->addMinutes(5)) ? 'success' : 'danger'}}">
-                                                            {{$device->last_activity ? $device->last_activity->toDayDateTimeString() : 'غير معروف'}}
-                                                        </th>
-                                                        <th>
-                                                            <a type="submit" class="btn btn-danger"
-                                                               data-toggle="confirmation"
-                                                               href="{{URL::signedRoute('co_accounts.account.subscription.device.delete', [$account, $account->subscription, $device])}}"
-                                                               data-btn-ok-label="تاكيد" data-btn-ok-class="btn-danger"
-                                                               {{--data-btn-ok-icon-class="material-icons" data-btn-ok-icon-content="check"--}}
-                                                               data-btn-cancel-label="لا"
-                                                               data-btn-cancel-class="btn-secondary"
-                                                               {{--data-btn-cancel-icon-class="material-icons" data-btn-cancel-icon-content="close"--}}
-                                                               data-title="تاكيد الحذف ؟"
-                                                               data-content="تاكيد حذف الجهاز ؟">حذف</a>
-                                                        </th>
-                                                    @endif
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                @endif
-                            </form>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
                         @else
                             <form action="{{route('co_accounts.account.subscription.store', $account)}}" method="post">
                                 {!! csrf_field() !!}
