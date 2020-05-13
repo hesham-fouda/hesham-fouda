@@ -122,10 +122,10 @@
                                                     </th>
                                                 @else
                                                     <th>{{count($device->ips) > 0 ? $device->ips[count($device->ips) - 1] : 'غير معروف'}}</th>
+                                                    <th>{{$device->created_at ? $device->created_at->toDayDateTimeString() : 'غير معروف'}}</th>
                                                     <th class="text text-{{ now()->lessThan($device->last_activity->addMinutes(5)) ? 'success' : 'danger'}}">
                                                         {{$device->last_activity ? $device->last_activity->toDayDateTimeString() : 'غير معروف'}}
                                                     </th>
-                                                    <th>{{$device->created_at ? $device->created_at->toDayDateTimeString() : 'غير معروف'}}</th>
                                                     <th>
                                                         <a type="submit" class="btn btn-danger"
                                                            data-toggle="confirmation"
