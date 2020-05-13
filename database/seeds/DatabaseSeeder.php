@@ -61,8 +61,8 @@ class DatabaseSeeder extends Seeder
 
             ['account_id' => 13, 'max_devices' => 7, 'start_at' => new Carbon('2020-04-01'), 'expire_at' => new Carbon('2020-06-30')],
             ['account_id' => 14, 'max_devices' => 4, 'start_at' => new Carbon('2020-04-08'), 'expire_at' => new Carbon('2020-06-07')],
-            ['account_id' => 15, 'max_devices' => 4, 'start_at' => new Carbon('2020-05-08'), 'expire_at' => new Carbon('2020-06-07')],
-            ['account_id' => 16, 'max_devices' => 4, 'start_at' => new Carbon('2020-05-11'), 'expire_at' => new Carbon('2020-06-10')],
+            ['account_id' => 15, 'max_devices' => 1, 'start_at' => new Carbon('2020-05-08'), 'expire_at' => new Carbon('2020-06-07')],
+            ['account_id' => 16, 'max_devices' => 1, 'start_at' => new Carbon('2020-05-11'), 'expire_at' => new Carbon('2020-06-10')],
         ]);
     }
 }
