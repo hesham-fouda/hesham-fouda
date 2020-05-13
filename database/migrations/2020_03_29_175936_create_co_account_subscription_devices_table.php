@@ -15,7 +15,7 @@ class CreateCoAccountSubscriptionDevicesTable extends Migration
     {
         Schema::create('co_account_subscription_devices', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('subscription_id');
+            $table->unsignedBigInteger('subscription_id')->nullable();
             $table->string('device_id');
             $table->string('device_name');
             $table->string('token');
@@ -23,10 +23,10 @@ class CreateCoAccountSubscriptionDevicesTable extends Migration
             $table->dateTime('last_activity');
             $table->timestamps();
             $table->softDeletes();
+        });
 
-            Schema::table('co_account_subscription_devices', function (Blueprint $table) {
-                $table->foreign('subscription_id')->references('id')->on('co_account_subscriptions')->onDelete('cascade');
-            });
+        Schema::table('co_account_subscription_devices', function (Blueprint $table) {
+            $table->foreign('subscription_id')->references('id')->on('co_account_subscriptions')->onDelete('set null');
         });
     }
 

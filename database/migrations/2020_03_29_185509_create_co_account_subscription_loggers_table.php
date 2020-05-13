@@ -15,9 +15,9 @@ class CreateCoAccountSubscriptionLoggersTable extends Migration
     {
         Schema::create('co_account_subscription_loggers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id')->nullable();
-            $table->unsignedInteger('account_id');
-            $table->unsignedInteger('subscription_id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('account_id');
+            $table->unsignedBigInteger('subscription_id');
             $table->string('devices')->nullable();
             $table->string('period')->nullable();
             $table->enum('type', ['new', 'update', 'renew']);

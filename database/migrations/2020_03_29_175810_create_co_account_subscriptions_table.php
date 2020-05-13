@@ -15,7 +15,7 @@ class CreateCoAccountSubscriptionsTable extends Migration
     {
         Schema::create('co_account_subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('account_id');
+            $table->unsignedBigInteger('account_id');
             $table->unsignedInteger('max_devices')->default(0);
             $table->date('start_at')->nullable();
             $table->date('expire_at')->nullable();
