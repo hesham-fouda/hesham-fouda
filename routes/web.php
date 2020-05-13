@@ -55,7 +55,7 @@ use GeoIp2\Database\Reader;
 Route::get('x-logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Route::get('test', function(){
-    dd(now()->toDayDateTimeString());
+    dd(now()->timezone(config('app.timezone'))->toDayDateTimeString());
 })->middleware('timezone.detector');
 
 Auth::routes(['register' => false]);

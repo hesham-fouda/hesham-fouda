@@ -19,8 +19,12 @@ class TimezoneDetector
         try {
             $reader = new \GeoIp2\Database\Reader(storage_path('app/GeoLite2-City.mmdb'));
             $record = $reader->city($request->ip());
-            date_default_timezone_set($record->location->timeZone);
-        } catch (\Exception $exception) {}
+            //date_default_timezone_set($record->location->timeZone);
+            //app('timezone', [$record->location->timeZone]);
+            config('app.timezone', $record->location->timeZone);
+        } catch (\Exception $exception) {
+            //config('app.timezone', 'UTC');
+        }
 
         return $next($request);
     }
