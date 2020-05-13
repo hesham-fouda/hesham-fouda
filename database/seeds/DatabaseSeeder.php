@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,7 +23,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\CoAccount::query()->insert([
-            ['full_name' => "Hisham Account", 'phone' => "01066869615", 'password' => "01066869615",],
+            ['full_name' => "Hisham Account", 'phone' => "01066869615", 'password' => "2607",],
             ['full_name' => "Mohamed Fouda", 'phone' => "01060474040", 'password' => "1797",],
             ['full_name' => "test1", 'phone' => "01000000001", 'password' => "1235",],
             ['full_name' => "test2", 'phone' => "01000000002", 'password' => "1234",],
@@ -34,6 +35,11 @@ class DatabaseSeeder extends Seeder
             ['full_name' => "test8", 'phone' => "01000000008", 'password' => "9514",],
             ['full_name' => "test9", 'phone' => "01000000009", 'password' => "3654",],
             ['full_name' => "test10", 'phone' => "01000000010", 'password' => "5896",],
+
+            ['full_name' => "AMR", 'phone' => "01144498373", 'password' => "5287",],
+            ['full_name' => "hema", 'phone' => "01273464642", 'password' => "5555",],
+            ['full_name' => "sameh", 'phone' => "01016906690", 'password' => "2717",],
+            ['full_name' => "Emad", 'phone' => "01118455067", 'password' => "0123",],
         ]);
 
         \App\CoAccountSubscription::query()->insert([
@@ -52,6 +58,11 @@ class DatabaseSeeder extends Seeder
             ['account_id' => 10, 'max_devices' => 1, 'start_at' => now(), 'expire_at' => now()->addDays(1)],
             ['account_id' => 11, 'max_devices' => 1, 'start_at' => now(), 'expire_at' => now()->addDays(1)],
             ['account_id' => 12, 'max_devices' => 1, 'start_at' => now(), 'expire_at' => now()->addDays(1)],
+
+            ['account_id' => 13, 'max_devices' => 7, 'start_at' => new Carbon('2020-04-01'), 'expire_at' => new Carbon('2020-06-30')],
+            ['account_id' => 14, 'max_devices' => 4, 'start_at' => new Carbon('2020-04-08'), 'expire_at' => new Carbon('2020-06-07')],
+            ['account_id' => 15, 'max_devices' => 4, 'start_at' => new Carbon('2020-05-08'), 'expire_at' => new Carbon('2020-06-07')],
+            ['account_id' => 16, 'max_devices' => 4, 'start_at' => new Carbon('2020-05-11'), 'expire_at' => new Carbon('2020-06-10')],
         ]);
     }
 }

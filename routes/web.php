@@ -63,7 +63,9 @@ Route::prefix('co_accounts')->namespace('CoAccounts')->name('co_accounts.')->gro
         Route::get('view', 'AccountController@view')->name('view');
         Route::post('subscription/store', 'AccountController@subscriptionStore')->name('subscription.store');
         Route::post('subscription/update', 'AccountController@subscriptionUpdate')->name('subscription.update');
+        Route::get('subscription/{CoAccountSubscription}/{CoAccountSubscriptionDevice}/device/delete', 'AccountController@subscriptionDeviceDelete')->name('subscription.device.delete');
     });
+    Route::get('{slug?}', 'HomeController@index')->where('slug', '^(?).*$');
 });
 
 Route::get('/', function () {

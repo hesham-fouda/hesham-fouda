@@ -4,9 +4,11 @@ namespace App\Http\Controllers\CoAccounts;
 
 use App\CoAccount;
 use App\CoAccountSubscription;
+use App\CoAccountSubscriptionDevice;
 use App\CoAccountSubscriptionLogger;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class AccountController extends Controller
 {
@@ -18,6 +20,7 @@ class AccountController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('signed')->only('subscriptionDeviceDelete');
     }
 
     /**
@@ -47,7 +50,9 @@ class AccountController extends Controller
      */
     public function view(Request $request, CoAccount $CoAccount)
     {
+        $devices = $CoAccount->subscription ? $CoAccount->subscription->devices()->withTrashed()->get() : collect([]);
         return view('co_accounts.account.view', [
+            'devices' => $devices,
             'account' => $CoAccount
         ]);
     }
@@ -120,19 +125,15 @@ class AccountController extends Controller
 
 
         if ((!is_null($CoAccount->subscription->expire_at) &&
-            now()->startOfDay()->greaterThan($CoAccount->subscription->expire_at)))
-        {
+            now()->startOfDay()->greaterThan($CoAccount->subscription->expire_at))) {
             $type = 'renew';
             $from = now();
-        }
-        else
-        {
+        } else {
             $type = 'update';
             $from = $CoAccount->subscription->expire_at;
         }
 
-        if($type === 'update')
-        {
+        if ($type === 'update') {
             if ($request->input('period') === 'month')
                 $expire_at = $from->clone()->addMonths(1);
             else
@@ -153,10 +154,10 @@ class AccountController extends Controller
                     ][$request->input('period')] ?? 0);
         }
 
-        $CoAccount->subscription()->update([
-                'start_at' => $from,
-                'expire_at' => $expire_at
-            ]);
+        $CoAccount->subscription->update([
+            'start_at' => $from->toDate(),
+            'expire_at' => $expire_at->toDate()
+        ]);
 
         $CoAccount->refresh();
         CoAccountSubscriptionLogger::query()->create([
@@ -170,6 +171,31 @@ class AccountController extends Controller
 
         return redirect()->route('co_accounts.account.view', $CoAccount)->with([
             'status' => 'تم تمديد / تجديد الإشتراك بنجاح'
+        ]);
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     * @param CoAccount $CoAccount
+     * @param CoAccountSubscription $CoAccountSubscription
+     * @param CoAccountSubscriptionDevice $CoAccountSubscriptionDevice
+     * @return \Illuminate\Contracts\Support\Renderable
+     * @throws \Exception
+     */
+    public function subscriptionDeviceDelete(Request $request, CoAccount $CoAccount,
+                                             CoAccountSubscription $CoAccountSubscription,
+                                             CoAccountSubscriptionDevice $CoAccountSubscriptionDevice)
+    {
+        if ($CoAccountSubscriptionDevice->subscription_id !== $CoAccountSubscription->id)
+            return redirect()->route('co_accounts.account.view', $CoAccount)->with([
+                'error' => 'خطأ فى الرابط يرجى إعادة المحاولة'
+            ]);
+
+        $CoAccountSubscriptionDevice->delete();
+        return redirect()->route('co_accounts.account.view', $CoAccount)->with([
+            'status' => 'تم حذف الجهاز بنجاح'
         ]);
     }
 }

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use OwenIt\Auditing\Auditable;
 
 /**
  * Class CoAccountSubscription
@@ -18,9 +19,9 @@ use Illuminate\Support\Collection;
  * @property Collection devices
  * @property CoAccount account
  */
-class CoAccountSubscription extends Model
+class CoAccountSubscription extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use SoftDeletes;
+    use SoftDeletes, Auditable;
 
     protected $fillable = [ 'account_id', 'max_devices', 'start_at', 'expire_at' ];
 
