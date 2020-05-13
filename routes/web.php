@@ -58,7 +58,7 @@ Route::get('test', function(){
     dd(now()->timezone(app('timezone'))->toDayDateTimeString());
 })->middleware('timezone.detector');
 
-Auth::routes(['register' => false]);
+Auth::routes(['register' => false, 'reset' => false,]);
 Route::prefix('co_accounts')->middleware('timezone.detector')->namespace('CoAccounts')->name('co_accounts.')->group(function(){
     Route::get('/home', 'HomeController@index')->name('home');
     Route::post('/account/store', 'AccountController@store')->name('account.store');
