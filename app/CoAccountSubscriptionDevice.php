@@ -22,7 +22,7 @@ class CoAccountSubscriptionDevice extends Model implements \OwenIt\Auditing\Cont
 {
     use SoftDeletes, Auditable;
 
-    protected $excludedAttributes = ['last_activity', 'ips', 'token'];
+    protected $auditExclude = ['last_activity', 'ips', 'token'];
 
     protected $fillable = [ 'subscription_id', 'device_id', 'device_name', 'token', 'ips', 'last_activity' ];
 
