@@ -103,6 +103,7 @@
                                             <th scope="col">#</th>
                                             <th scope="col">إسم الجهاز</th>
                                             <th scope="col">أخر أى بى</th>
+                                            <th scope="col">أول نشاط</th>
                                             <th scope="col">أخر نشاط</th>
                                             <th scope="col">إجراءات</th>
                                         </tr>
@@ -113,7 +114,7 @@
                                                 <th scope="row">{{$loop->index + 1}}</th>
                                                 <th>{{$device->device_name}}</th>
                                                 @if($device->trashed())
-                                                    <th colspan="3">
+                                                    <th colspan="4">
                                                         <center>
                                                             محذوف في :
                                                             {{$device->deleted_at->toDayDateTimeString()}}
@@ -124,6 +125,7 @@
                                                     <th class="text text-{{ now()->lessThan($device->last_activity->addMinutes(5)) ? 'success' : 'danger'}}">
                                                         {{$device->last_activity ? $device->last_activity->toDayDateTimeString() : 'غير معروف'}}
                                                     </th>
+                                                    <th>{{$device->created_at ? $device->created_at->toDayDateTimeString() : 'غير معروف'}}</th>
                                                     <th>
                                                         <a type="submit" class="btn btn-danger"
                                                            data-toggle="confirmation"
