@@ -23,6 +23,10 @@ class CreateCoAccountSubscriptionDevicesTable extends Migration
             $table->dateTime('last_activity');
             $table->timestamps();
             $table->softDeletes();
+
+            Schema::table('co_account_subscription_devices', function (Blueprint $table) {
+                $table->foreign('subscription_id')->references('id')->on('co_account_subscriptions')->onDelete('cascade');
+            });
         });
     }
 
@@ -34,5 +38,9 @@ class CreateCoAccountSubscriptionDevicesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('co_account_subscription_devices');
+
+        Schema::table('co_account_subscription_devices', function (Blueprint $table) {
+            $table->dropForeign('subscription_id');
+        });
     }
 }

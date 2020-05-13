@@ -8,6 +8,7 @@ use App\CoAccountSubscriptionDevice;
 use App\CoAccountSubscriptionLogger;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
 class AccountController extends Controller
@@ -92,6 +93,7 @@ class AccountController extends Controller
             ]));
         $CoAccount->refresh();
         CoAccountSubscriptionLogger::query()->create([
+            'user_id' => Auth::id(),
             'subscription_id' => $CoAccount->subscription->id,
             'account_id' => $CoAccount->id,
             'type' => 'new',
@@ -161,6 +163,7 @@ class AccountController extends Controller
 
         $CoAccount->refresh();
         CoAccountSubscriptionLogger::query()->create([
+            'user_id' => Auth::id(),
             'subscription_id' => $CoAccount->subscription->id,
             'account_id' => $CoAccount->id,
             'type' => $type,

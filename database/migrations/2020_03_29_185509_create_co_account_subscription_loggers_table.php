@@ -15,6 +15,7 @@ class CreateCoAccountSubscriptionLoggersTable extends Migration
     {
         Schema::create('co_account_subscription_loggers', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('account_id');
             $table->unsignedInteger('subscription_id');
             $table->string('devices')->nullable();
@@ -23,6 +24,12 @@ class CreateCoAccountSubscriptionLoggersTable extends Migration
             $table->string('note')->nullable();
             $table->date('expire_at')->nullable();
             $table->timestamp('created_at')->nullable();
+        });
+
+        Schema::table('co_account_subscription_loggers', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('account_id')->references('id')->on('co_account_subscriptions')->onDelete('cascade');
+            $table->foreign('subscription_id')->references('id')->on('co_accounts')->onDelete('cascade');
         });
     }
 
@@ -34,5 +41,11 @@ class CreateCoAccountSubscriptionLoggersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('co_account_subscription_loggers');
+
+        Schema::table('co_account_subscription_loggers', function (Blueprint $table) {
+            $table->dropForeign('user_id');
+            $table->dropForeign('account_id');
+            $table->dropForeign('subscription_id');
+        });
     }
 }

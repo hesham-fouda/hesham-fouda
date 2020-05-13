@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
 
 
 /**
@@ -16,9 +17,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property CoAccountSubscription subscription
  * @property CoAccountSubscriptionDevice devices
  */
-class CoAccount extends Model
+class CoAccount extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use SoftDeletes;
+    use SoftDeletes, Auditable;
     /**
      * @var array
      */

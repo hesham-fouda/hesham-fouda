@@ -22,6 +22,10 @@ class CreateCoAccountSubscriptionsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::table('co_account_subscriptions', function (Blueprint $table) {
+            $table->foreign('account_id')->references('id')->on('co_accounts')->onDelete('cascade');
+        });
     }
 
     /**
@@ -32,5 +36,9 @@ class CreateCoAccountSubscriptionsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('co_account_subscriptions');
+
+        Schema::table('co_account_subscriptions', function (Blueprint $table) {
+            $table->dropForeign('account_id');
+        });
     }
 }
