@@ -26,7 +26,7 @@ class TimezoneDetector
                 return $record->location->timeZone;
             });
         } catch (\Exception $exception) {
-            app()->singleton('timezone', function() use($record) {
+            app()->singleton('timezone', function() {
                 return config('app.timezone', 'UTC');
             });
             //config('app.timezone', 'UTC');
