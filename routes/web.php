@@ -53,9 +53,12 @@ use GeoIp2\Database\Reader;
 //});
 
 Route::get('x-logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+Route::get('test', function(){
+    var_dump(now());
+})->middleware('timezone.detector');
 
 Auth::routes(['register' => false]);
-Route::prefix('co_accounts')->namespace('CoAccounts')->name('co_accounts.')->group(function(){
+Route::prefix('co_accounts')->middleware('timezone.detector')->namespace('CoAccounts')->name('co_accounts.')->group(function(){
     Route::get('/home', 'HomeController@index')->name('home');
     Route::post('/account/store', 'AccountController@store')->name('account.store');
 
