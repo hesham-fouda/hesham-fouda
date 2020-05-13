@@ -21,8 +21,14 @@ class TimezoneDetector
             $record = $reader->city($request->ip());
             //date_default_timezone_set($record->location->timeZone);
             //app('timezone', [$record->location->timeZone]);
-            config()->set('app.timezone', $record->location->timeZone);
+
+            app()->singleton('timezone', function() use($record) {
+                return $record->location->timeZone;
+            });
         } catch (\Exception $exception) {
+            app()->singleton('timezone', function() use($record) {
+                return config('app.timezone', 'UTC');
+            });
             //config('app.timezone', 'UTC');
         }
 
