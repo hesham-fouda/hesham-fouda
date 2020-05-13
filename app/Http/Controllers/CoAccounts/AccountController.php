@@ -124,7 +124,7 @@ class AccountController extends Controller
         $request->validate([
             'period' => 'required|in:day,week,2week,3week,month',
         ]);
-
+        $old_expire_at = $CoAccount->subscription->expire_at;
 
         if ((!is_null($CoAccount->subscription->expire_at) &&
             now()->startOfDay()->greaterThan($CoAccount->subscription->expire_at))) {
@@ -168,6 +168,7 @@ class AccountController extends Controller
             'account_id' => $CoAccount->id,
             'type' => $type,
             'period' => $request->input('period'),
+            'old_expire_at' => $old_expire_at,
             'expire_at' => $expire_at,
             'created_at' => now()
         ]);

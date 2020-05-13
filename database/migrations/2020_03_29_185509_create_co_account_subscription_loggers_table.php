@@ -22,6 +22,7 @@ class CreateCoAccountSubscriptionLoggersTable extends Migration
             $table->string('period')->nullable();
             $table->enum('type', ['new', 'update', 'renew']);
             $table->string('note')->nullable();
+            $table->date('old_expire_at')->nullable();
             $table->date('expire_at')->nullable();
             $table->timestamp('created_at')->nullable();
         });
