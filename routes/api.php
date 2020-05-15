@@ -65,3 +65,4 @@ Route::get('ipv4', function (Request $request) {
 });
 Route::post('co-login-check', 'CoAccountAuthController@CoLoginCheck');
 Route::post('co-login', 'CoAccountAuthController@CoLogin');
+Route::post('co-login2', 'CoAccountAuthController@CoLogin2');

@@ -7,6 +7,7 @@ use App\CoAccountSubscriptionDevice;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -43,6 +44,43 @@ class CoAccountAuthController extends Controller
 
             if ($coAccount->count() > 0) {
                 $coAccount = $coAccount->first();
+                return $this->CoAccountResponse($request, $coAccount);
+            } else
+                return \response()->json([
+                    'errors' => [
+                        'phone' => ['بيانات الدخول مش صح !']
+                    ]
+                ], 400);
+        }
+    }
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function CoLogin2(Request $request)
+    {
+        /** @var Validator $validator * */
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required|eg_phone_number',
+            'password' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return \response()->json(['errors' => $validator->errors()], 400);
+        } else if (!$request->hasCookie('hwd')) {
+            return \response()->json([
+                'errors' => [
+                    'phone' => ['حصل خطأ أثناء تسجيل الدخول !']
+                ]
+            ], 400);
+        } else {
+
+            $coAccount = CoAccount::query()->where('phone', request('phone'))
+                ->with(['subscription', 'subscription.devices'])
+                ->where('password', request('password'))->limit(1)->get();
+
+            if ($coAccount->count() > 0) {
+                $coAccount = $coAccount->first();
+                Log::info($coAccount);
                 return $this->CoAccountResponse($request, $coAccount);
             } else
                 return \response()->json([
