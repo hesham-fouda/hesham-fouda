@@ -17,7 +17,7 @@ class TelescopeAuthorize
      */
     public function handle($request, Closure $next)
     {
-        dd(Telescope::$authUsing);
+        dd($request->user());
         return Telescope::check($request) ? $next($request) : abort(403);
     }
 }
