@@ -33,7 +33,8 @@ class AppServiceProvider extends ServiceProvider
             return 'Africa/cairo';
         });*/
 
-        Telescope::auth(function($request){
+        Telescope::auth(function ($request) {
+            dd($request);
             return true;
         });
 
