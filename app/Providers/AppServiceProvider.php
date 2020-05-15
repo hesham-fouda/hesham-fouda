@@ -46,9 +46,5 @@ class AppServiceProvider extends ServiceProvider
         Audit::creating(function (Audit $model) {
             return (empty($model->old_values) && empty($model->new_values));
         });
-
-        Gate::define('viewTelescope', function ($user) {
-            return in_array($user->email, ['etchfoda@gmail.com']);
-        });
     }
 }
