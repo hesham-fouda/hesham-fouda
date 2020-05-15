@@ -33,19 +33,16 @@ class AppServiceProvider extends ServiceProvider
             return 'Africa/cairo';
         });*/
 
-        Telescope::$authUsing = true;
-        /*Telescope::auth(function(){
+        Telescope::auth(function($request){
             return true;
-        });*/
+        });
 
-        Validator::extend('eg_phone_number', function($attribute, $value, $parameters, $validator){
+        Validator::extend('eg_phone_number', function ($attribute, $value, $parameters, $validator) {
             return preg_match('/^(00201|201|\+201|01)(0|1|2|5)([0-9]{8})$/', $value);
         });
 
         Audit::creating(function (Audit $model) {
-            if (empty($model->old_values) && empty($model->new_values)) {
-                return false;
-            }
+            return (empty($model->old_values) && empty($model->new_values));
         });
     }
 }
