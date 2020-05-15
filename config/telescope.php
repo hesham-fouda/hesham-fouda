@@ -78,7 +78,7 @@ return [
 
     'middleware' => [
         'web',
-        TelescopeAuthorize::class,
+        Authorize::class,
     ],
 
     /*

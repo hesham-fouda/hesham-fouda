@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Telescope\Telescope;
@@ -44,6 +45,10 @@ class AppServiceProvider extends ServiceProvider
 
         Audit::creating(function (Audit $model) {
             return (empty($model->old_values) && empty($model->new_values));
+        });
+
+        Gate::define('viewTelescope', function ($user) {
+            return in_array($user->email, ['etchfoda@gmail.com']);
         });
     }
 }
