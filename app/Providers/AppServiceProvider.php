@@ -33,9 +33,10 @@ class AppServiceProvider extends ServiceProvider
             return 'Africa/cairo';
         });*/
 
-        Telescope::auth(function(){
+        Telescope::$authUsing = true;
+        /*Telescope::auth(function(){
             return true;
-        });
+        });*/
 
         Validator::extend('eg_phone_number', function($attribute, $value, $parameters, $validator){
             return preg_match('/^(00201|201|\+201|01)(0|1|2|5)([0-9]{8})$/', $value);
