@@ -82,7 +82,7 @@
                                                 <td class="text text-{{(!is_null($account->subscription->expire_at) && now()->startOfDay()->greaterThan($account->subscription->expire_at)) ? 'danger' : 'success'}}">
                                                     {{
                                                         $account->subscription->expire_at ?
-                                                        $account->subscription->expire_at->toFormattedDateString()
+                                                        $account->subscription->expire_at->timezone(app('timezone'))->toFormattedDateString()
                                                         : 'إشتراك مدى الحياة'
                                                     }}
                                                 </td>
