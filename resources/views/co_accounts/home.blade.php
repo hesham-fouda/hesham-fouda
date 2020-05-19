@@ -87,9 +87,11 @@
                                                     }}
                                                 </td>
                                                 @php($last_activity = $account->subscription->devices->count() > 0 ? $account->subscription->devices->max('last_activity') : null)
-                                                <td>{{ $last_activity ?
+                                                <td class="text text-{{(!is_null($last_activity) && now()->startOfDay()->greaterThan($last_activity)) ? 'danger' : 'success'}}">
+                                                    {{ $last_activity ?
                                                     $last_activity->timezone(app('timezone'))->toDayDateTimeString() :
-                                                    'لا يوجد نشاط' }}</td>
+                                                    'لا يوجد نشاط' }}
+                                                </td>
                                             @else
                                                 <td colspan="3">لا يوجد إشتراك</td>
                                             @endif
