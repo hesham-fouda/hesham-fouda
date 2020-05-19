@@ -67,6 +67,7 @@
                                         <th scope="col">رقم التليفون</th>
                                         <th scope="col">عدد الأجهزة</th>
                                         <th scope="col">نهاية الإشتراك</th>
+                                        <th scope="col">أخر نشاط</th>
                                         <th scope="col">إجراءات</th>
                                     </tr>
                                     </thead>
@@ -85,8 +86,12 @@
                                                         : 'إشتراك مدى الحياة'
                                                     }}
                                                 </td>
+                                                @php($last_activity = $account->subscription->devices->count() > 0 ? $account->subscription->devices->first() : null)
+                                                <td>{{ $last_activity ?
+                                                    $last_activity->timezone(app('timezone'))->toDayDateTimeString() :
+                                                    'لا يوجد نشاط' }}</td>
                                             @else
-                                                <td colspan="2">لا يوجد إشتراك</td>
+                                                <td colspan="3">لا يوجد إشتراك</td>
                                             @endif
                                             <td>
                                                 <a class="btn btn-primary" href="{{route('co_accounts.account.view', $account)}}">View</a>
