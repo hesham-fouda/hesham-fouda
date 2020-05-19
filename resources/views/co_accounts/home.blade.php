@@ -86,7 +86,10 @@
                                                         : 'إشتراك مدى الحياة'
                                                     }}
                                                 </td>
-
+                                                @php($last_activity = $account->subscription->devices->count() > 0 ? $account->subscription->devices->first()->last_activity : null)
+                                                <td>{{ $last_activity ?
+                                                    $last_activity->timezone(app('timezone'))->toDayDateTimeString() :
+                                                    'لا يوجد نشاط' }}</td>
                                             @else
                                                 <td colspan="3">لا يوجد إشتراك</td>
                                             @endif
