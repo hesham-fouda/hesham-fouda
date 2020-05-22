@@ -57,7 +57,7 @@ Route::get('x-logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('h-ip', function(){
     $client = new GuzzleHttp\Client();
     $res = $client->get('https://api.ipify.org/?format=json');
-    dd($res->getBody());
+    dd((string) $res->getBody());
 })->middleware('timezone.detector');
 
 Route::get('test', function(){
