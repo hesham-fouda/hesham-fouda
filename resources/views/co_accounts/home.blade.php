@@ -16,6 +16,8 @@
                         <form style="margin-bottom: 30px;" action="{{route('co_accounts.account.store')}}"
                               method="post">
                             {!! csrf_field() !!}
+                            <input type="text" style="display: none;" name="fakeusername">
+                            <input type="password" style="display: none;" name="fakepassword">
                             <div class="form-group">
                                 <label for="full_name">name</label>
                                 <input type="text" name="full_name" value="{{ old('full_name') }}" autocomplete="off"
