@@ -61,7 +61,7 @@ Route::get('h-ip', function(){
 })->middleware('timezone.detector');
 
 Route::get('test', function(\Illuminate\Http\Request $request){
-    dd($_SERVER);
+    //dd($_SERVER);
     dd(now()->timezone(app('timezone'))->toDayDateTimeString());
 })->middleware('timezone.detector');
 
