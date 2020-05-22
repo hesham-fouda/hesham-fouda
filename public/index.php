@@ -18,6 +18,9 @@ if(isset($_SERVER['HTTP_CF_VISITOR'])){
     }
 }if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
     $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+}else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+    $ipAddresses = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+    $_SERVER['REMOTE_ADDR'] = trim(end($ipAddresses));
 }
 
 if(!isset($_SERVER['HEADER_X_FORWARDED_PORT']))
@@ -27,10 +30,7 @@ if(!isset($_SERVER['HEADER_X_FORWARDED_PROTO']))
 if(($_SERVER['HTTP_X_FORWARDED_PORT'] == 443 || $_SERVER['HEADER_X_FORWARDED_PORT'] = 443) || $_SERVER['HTTPS'] != 'on')
     $_SERVER['HTTPS'] = 'on';
 
-if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-    $ipAddresses = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-    $_SERVER['REMOTE_ADDR'] = trim(end($ipAddresses));
-}
+
 
 
 
