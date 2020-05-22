@@ -54,6 +54,12 @@ use GeoIp2\Database\Reader;
 
 Route::get('x-logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
+Route::get('h-ip', function(){
+    $client = new GuzzleHttp\Client();
+    $res = $client->get('https://api.ipify.org/?format=json');
+    dd($res);
+})->middleware('timezone.detector');
+
 Route::get('test', function(){
     dd(now()->timezone(app('timezone'))->toDayDateTimeString());
 })->middleware('timezone.detector');
