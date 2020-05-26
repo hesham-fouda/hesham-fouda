@@ -28,6 +28,7 @@ class CoAccountSubscriptionDevice extends Model implements \OwenIt\Auditing\Cont
 
     protected $casts = [
         'ips' => 'array',
+        'subscription_id' => 'int',
         'last_activity' => 'datetime',
     ];
 
