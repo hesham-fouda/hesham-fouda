@@ -182,7 +182,7 @@ class CoAccountAuthController extends Controller
             if ($coAccount->subscription->max_devices == $coAccount->subscription->devices->count())
                 return \response()->json([
                     'errors' => [
-                        'phone' => ['وصلت لأقصى حد فى عدد الأجهزة مينقعش تستعمل أجهزة أكتر من كدا !']
+                        'phone' => ['وصلت لأقصى حد فى عدد الأجهزة مينفعش تستعمل أجهزة أكتر من كدا !']
                     ]
                 ], 400);
 
