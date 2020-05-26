@@ -116,13 +116,13 @@ class CoAccountAuthController extends Controller
                 $token = explode(':', $request->post('token'));
                 $coAccount = CoAccount::query()->where('id', $token[0])
                     ->whereHas('devices', function (Builder $query) use ($token, $request) {
-                        $query->where('token', $token[1])->where('device_id', $request->cookie('hwd'));
+                        $query->where('token', $token[1])->where('device_id', str_replace(' ', '+', $request->cookie('hwd')));
                     })->limit(1)->get();
 
 
                 /*dd(
                     $coAccount,
-                    $request->cookie('hwd')
+                    str_replace(' ', '+', $request->cookie('hwd'))
                 );*/
                 if ($coAccount->count() > 0) {
                     $coAccount = $coAccount->first();
@@ -175,7 +175,7 @@ class CoAccountAuthController extends Controller
 
         /** @var CoAccountSubscriptionDevice $device * */
         $device = $coAccount->subscription->devices->filter(function (CoAccountSubscriptionDevice $device) use ($request) {
-            return $device->device_id === $request->cookie('hwd');
+            return $device->device_id === str_replace(' ', '+', $request->cookie('hwd'));
         })->first();
 
         if (is_null($device)) {
@@ -187,7 +187,7 @@ class CoAccountAuthController extends Controller
                 ], 400);
 
             $coAccount->subscription->devices()->create([
-                'device_id' => $request->cookie('hwd'),
+                'device_id' => str_replace(' ', '+', $request->cookie('hwd')),
                 'device_name' => $request->cookie('dv_name'),
                 'last_activity' => now(),
                 'ips' => [$request->ip()],
@@ -195,7 +195,7 @@ class CoAccountAuthController extends Controller
             ]);
             $coAccount->subscription->refresh();
             $device = $coAccount->subscription->devices->filter(function (CoAccountSubscriptionDevice $device) use ($request) {
-                return $device->device_id === $request->cookie('hwd');
+                return $device->device_id === str_replace(' ', '+', $request->cookie('hwd'));
             })->first();
         } else {
             $updateData = [
