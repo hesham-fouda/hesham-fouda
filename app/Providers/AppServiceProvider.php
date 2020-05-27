@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Audit::creating(function (Audit $model) {
-            return (empty($model->old_values) && empty($model->new_values));
+            return !(empty($model->old_values) && empty($model->new_values));
         });
     }
 }

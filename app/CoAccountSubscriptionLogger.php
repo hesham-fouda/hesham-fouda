@@ -10,5 +10,13 @@ class CoAccountSubscriptionLogger extends Model
 
     protected $dates = ['created_at'];
 
+    protected $casts = [
+        'user_id' => 'int',
+        'subscription_id' => 'int',
+        'account_id' => 'int',
+        'old_expire_at' => 'datetime',
+        'expire_at' => 'datetime',
+    ];
+
     public $timestamps = false;
 }

@@ -26,6 +26,8 @@ class CoAccountSubscription extends Model implements \OwenIt\Auditing\Contracts\
     protected $fillable = [ 'account_id', 'max_devices', 'start_at', 'expire_at' ];
 
     protected $casts = [
+        'account_id' => 'int',
+        'max_devices' => 'int',
         'start_at' => 'datetime',
         'expire_at' => 'datetime'
     ];
