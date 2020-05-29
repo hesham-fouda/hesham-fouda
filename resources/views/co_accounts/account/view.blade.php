@@ -102,6 +102,7 @@
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">إسم الجهاز</th>
+                                            <th scope="col">نسخة البرنامج</th>
                                             <th scope="col">أخر أى بى</th>
                                             <th scope="col">أول نشاط</th>
                                             <th scope="col">أخر نشاط</th>
@@ -113,6 +114,7 @@
                                             <tr>
                                                 <th scope="row">{{$loop->index + 1}}</th>
                                                 <th>{{$device->device_name}}</th>
+                                                <th>{{$device->app_version ? 'V'.$device->app_version : 'غير معروف' }}</th>
                                                 @if($device->trashed())
                                                     <th colspan="4">
                                                         <center>
