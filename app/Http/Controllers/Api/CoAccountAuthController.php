@@ -131,7 +131,7 @@ class CoAccountAuthController extends Controller
                 ]
             ], 400);
 
-        if ($coAccount->subscription->max_devices < $coAccount->subscription->devices->count())
+        if ($coAccount->subscription->devices->count() > $coAccount->subscription->max_devices)
             return \response()->json([
                 'errors' => [
                     'phone' => ['إشتراكك موقوف بسبب عدد الأجهزة راجع الدعم الفنى !']
@@ -144,7 +144,7 @@ class CoAccountAuthController extends Controller
         })->first();
 
         if (is_null($device)) {
-            if ($coAccount->subscription->max_devices >= $coAccount->subscription->devices->count())
+            if ($coAccount->subscription->devices->count() >= $coAccount->subscription->max_devices)
                 return \response()->json([
                     'errors' => [
                         'phone' => ['وصلت لأقصى حد فى عدد الأجهزة مينفعش تستعمل أجهزة أكتر من كدا !']
