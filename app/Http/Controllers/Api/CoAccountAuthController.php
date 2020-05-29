@@ -17,6 +17,8 @@ use Illuminate\Support\Str;
  */
 class CoAccountAuthController extends Controller
 {
+    public $isV2 = false;
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -28,59 +30,22 @@ class CoAccountAuthController extends Controller
             'phone' => 'required|eg_phone_number',
             'password' => 'required',
         ]);
+
         if ($validator->fails()) {
             return \response()->json(['errors' => $validator->errors()], 400);
-        } else if (!$request->hasCookie('hwd')) {
+        } else if (!$request->{$this->isV2 ? 'has' : 'hasCookie'}('hwd')) {
             return \response()->json([
                 'errors' => [
                     'phone' => ['حصل خطأ أثناء تسجيل الدخول !']
                 ]
             ], 400);
         } else {
-
             $coAccount = CoAccount::query()->where('phone', request('phone'))
                 ->with(['subscription', 'subscription.devices'])
                 ->where('password', request('password'))->limit(1)->get();
 
             if ($coAccount->count() > 0) {
                 $coAccount = $coAccount->first();
-                return $this->CoAccountResponse($request, $coAccount);
-            } else
-                return \response()->json([
-                    'errors' => [
-                        'phone' => ['بيانات الدخول مش صح !']
-                    ]
-                ], 400);
-        }
-    }
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function CoLogin2(Request $request)
-    {
-        /** @var Validator $validator * */
-        $validator = Validator::make($request->all(), [
-            'phone' => 'required|eg_phone_number',
-            'password' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return \response()->json(['errors' => $validator->errors()], 400);
-        } else if (!$request->hasCookie('hwd')) {
-            return \response()->json([
-                'errors' => [
-                    'phone' => ['حصل خطأ أثناء تسجيل الدخول !']
-                ]
-            ], 400);
-        } else {
-
-            $coAccount = CoAccount::query()->where('phone', request('phone'))
-                ->with(['subscription', 'subscription.devices'])
-                ->where('password', request('password'))->limit(1)->get();
-
-            if ($coAccount->count() > 0) {
-                $coAccount = $coAccount->first();
-                Log::info($coAccount);
                 return $this->CoAccountResponse($request, $coAccount);
             } else
                 return \response()->json([
@@ -105,7 +70,7 @@ class CoAccountAuthController extends Controller
         ]);
         if ($validator->fails()) {
             return \response()->json(['errors' => $validator->errors()], 400);
-        } else if (!$request->hasCookie('hwd')) {
+        } else if (!$request->{$this->isV2 ? 'has' : 'hasCookie'}('hwd')) {
             return \response()->json([
                 'errors' => [
                     'phone' => ['حصل خطأ أثناء التحقق من تسجيل الدخول !']
@@ -116,7 +81,7 @@ class CoAccountAuthController extends Controller
                 $token = explode(':', $request->post('token'));
                 $coAccount = CoAccount::query()->where('id', $token[0])
                     ->whereHas('devices', function (Builder $query) use ($token, $request) {
-                        $query->where('token', $token[1])->where('device_id', str_replace(' ', '+', $request->cookie('hwd')));
+                        $query->where('token', $token[1])->where('device_id', str_replace(' ', '+', $request->{$this->isV2 ? 'input' : 'cookie'}('hwd')));
                     })->limit(1)->get();
 
 
@@ -175,7 +140,7 @@ class CoAccountAuthController extends Controller
 
         /** @var CoAccountSubscriptionDevice $device * */
         $device = $coAccount->subscription->devices->filter(function (CoAccountSubscriptionDevice $device) use ($request) {
-            return $device->device_id === str_replace(' ', '+', $request->cookie('hwd'));
+            return $device->device_id === str_replace(' ', '+', $request->{$this->isV2 ? 'input' : 'cookie'}('hwd'));
         })->first();
 
         if (is_null($device)) {
@@ -187,23 +152,32 @@ class CoAccountAuthController extends Controller
                 ], 400);
 
             $coAccount->subscription->devices()->create([
-                'device_id' => str_replace(' ', '+', $request->cookie('hwd')),
-                'device_name' => $request->cookie('dv_name'),
+                'device_id' => str_replace(' ', '+', $request->{$this->isV2 ? 'input' : 'cookie'}('hwd')),
+                'device_name' => $request->{$this->isV2 ? 'input' : 'cookie'}('dv_name'),
                 'last_activity' => now(),
                 'ips' => [$request->ip()],
                 'token' => Str::random(64),
             ]);
             $coAccount->subscription->refresh();
             $device = $coAccount->subscription->devices->filter(function (CoAccountSubscriptionDevice $device) use ($request) {
-                return $device->device_id === str_replace(' ', '+', $request->cookie('hwd'));
+                return $device->device_id === str_replace(' ', '+', $request->{$this->isV2 ? 'input' : 'cookie'}('hwd'));
             })->first();
         } else {
             $updateData = [
                 'last_activity' => now(),
-                'device_name' => $request->cookie('dv_name'),
+                //'device_name' => $request->{$this->isV2 ? 'input' : 'cookie'}('dv_name'),
             ];
+            $dv_name = $request->{$this->isV2 ? 'input' : 'cookie'}('dv_name');
+            if ($dv_name !== $device->device_name)
+                $updateData['device_name'] = $dv_name;
+
+            $app_version = $request->{$this->isV2 ? 'input' : 'cookie'}('app_version');
+            if ($app_version !== null && $app_version !== $device->app_version)
+                $updateData['app_version'] = $app_version;
+
             if (!in_array($request->ip(), ($device->ips ?? [])))
                 $updateData['ips'] = array_merge(($device->ips ?? []), [$request->ip()]);
+
             if ($newToken)
                 $updateData['token'] = Str::random(64);
 

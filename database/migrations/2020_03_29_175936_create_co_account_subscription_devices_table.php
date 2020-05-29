@@ -18,6 +18,7 @@ class CreateCoAccountSubscriptionDevicesTable extends Migration
             $table->unsignedBigInteger('subscription_id')->nullable();
             $table->string('device_id');
             $table->string('device_name');
+            $table->string('app_version')->nullable();
             $table->string('token');
             $table->json('ips');
             $table->dateTime('last_activity');

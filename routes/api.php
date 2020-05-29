@@ -18,6 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('v2')->group(function(){
+    Route::post('co-login-check', 'CoAccountAuthControllerV2@CoLoginCheck');
+    Route::post('co-login', 'CoAccountAuthControllerV2@CoLogin');
+});
 
 Route::get('ping', function (Request $request) { return 'pong'; });
 Route::get('ipv4', function (Request $request) {
@@ -65,4 +69,3 @@ Route::get('ipv4', function (Request $request) {
 });
 Route::post('co-login-check', 'CoAccountAuthController@CoLoginCheck');
 Route::post('co-login', 'CoAccountAuthController@CoLogin');
-Route::post('co-login2', 'CoAccountAuthController@CoLogin2');

@@ -14,6 +14,7 @@ use OwenIt\Auditing\Auditable;
  * @property int subscription_id
  * @property string device_id
  * @property string device_name
+ * @property string app_version
  * @property string token
  * @property array|null ips
  * @property Carbon last_activity
@@ -24,7 +25,7 @@ class CoAccountSubscriptionDevice extends Model implements \OwenIt\Auditing\Cont
 
     protected $auditExclude = ['last_activity', 'ips', 'token'];
 
-    protected $fillable = [ 'subscription_id', 'device_id', 'device_name', 'token', 'ips', 'last_activity' ];
+    protected $fillable = [ 'subscription_id', 'device_id', 'device_name', 'app_version', 'token', 'ips', 'last_activity' ];
 
     protected $casts = [
         'ips' => 'array',
