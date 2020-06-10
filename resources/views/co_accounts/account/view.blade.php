@@ -46,6 +46,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div>
+                            <div class="form-group row">
+                                <label for="acPw" class="col-sm-2 col-form-label">Password</label>
+                                <div class="col-sm-10">
+                                    <input type="text" readonly class="form-control" id="acPw"
+                                           value="{{$account->password}}">
+                                </div>
+                            </div>
+                        </div>
                         @if($account->subscription)
                             <div>
                                 <div class="form-group row">
