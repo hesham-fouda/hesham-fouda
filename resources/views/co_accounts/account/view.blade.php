@@ -76,6 +76,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <form action="{{URL::signedRoute('co_accounts.account.subscription.delete', [$account], now()->addMinutes(5))}}"
+                                  method="post">
+                                {!! csrf_field() !!}
+                                <hr>
+                                <h3>حذف الإشتراك</h3>
+                                <button type="submit" class="btn btn-danger" data-toggle="confirmation"
+                                        data-btn-ok-label="تاكيد" data-btn-ok-class="btn-danger"
+                                        data-btn-cancel-label="لا" data-btn-cancel-class="btn-light"
+                                        data-title="تاكيد ؟" data-content="تاكيد حذف الإشتراك ؟">Submit
+                                </button>
+                            </form>
                             @if($account->subscription->expire_at)
                                 <form action="{{route('co_accounts.account.subscription.update', $account)}}"
                                       method="post">

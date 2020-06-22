@@ -113,6 +113,29 @@ class AccountController extends Controller
      *
      * @param Request $request
      * @param CoAccount $CoAccount
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
+     */
+    public function subscriptionDelete(Request $request, CoAccount $CoAccount)
+    {
+        if (is_null($CoAccount->subscription))
+            return back()->with('error', 'لا يوجد إشتراك لحذفه !');
+        $CoAccount->subscription->delete();
+        CoAccountSubscriptionLogger::query()->create([
+            'user_id' => Auth::id(),
+            'subscription_id' => $CoAccount->subscription->id,
+            'account_id' => $CoAccount->id,
+            'type' => 'delete',
+            'created_at' => now()
+        ]);
+        return back()->with('status', 'تم حذف الإشتراك بنجاح');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @param Request $request
+     * @param CoAccount $CoAccount
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function subscriptionUpdate(Request $request, CoAccount $CoAccount)

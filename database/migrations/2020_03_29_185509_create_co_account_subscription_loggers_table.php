@@ -20,7 +20,7 @@ class CreateCoAccountSubscriptionLoggersTable extends Migration
             $table->unsignedBigInteger('subscription_id');
             $table->string('devices')->nullable();
             $table->string('period')->nullable();
-            $table->enum('type', ['new', 'update', 'renew']);
+            $table->enum('type', ['new', 'update', 'renew', 'delete']);
             $table->string('note')->nullable();
             $table->date('old_expire_at')->nullable();
             $table->date('expire_at')->nullable();

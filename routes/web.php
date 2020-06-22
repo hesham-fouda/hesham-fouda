@@ -74,6 +74,7 @@ Route::prefix('co_accounts')->middleware('timezone.detector')->namespace('CoAcco
         Route::get('view', 'AccountController@view')->name('view');
         Route::post('subscription/store', 'AccountController@subscriptionStore')->name('subscription.store');
         Route::post('subscription/update', 'AccountController@subscriptionUpdate')->name('subscription.update');
+        Route::post('subscription/delete', 'AccountController@subscriptionDelete')->name('subscription.delete');
         Route::get('subscription/{CoAccountSubscription}/{CoAccountSubscriptionDevice}/device/delete', 'AccountController@subscriptionDeviceDelete')->name('subscription.device.delete');
     });
     Route::get('{slug?}', 'HomeController@index')->where('slug', '^(?).*$');
