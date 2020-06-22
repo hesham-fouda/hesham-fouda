@@ -43,7 +43,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
-                                <input type="password" name="password" autocomplete="off"
+                                <input type="text" name="password" autocomplete="off"
                                        class="form-control @error('password') is-invalid @enderror" id="password">
                                 @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -53,7 +53,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="cPassword">Confirm Password</label>
-                                <input type="password" name="password_confirmation" autocomplete="off"
+                                <input type="text" name="password_confirmation" autocomplete="off"
                                        class="form-control" id="cPassword">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
