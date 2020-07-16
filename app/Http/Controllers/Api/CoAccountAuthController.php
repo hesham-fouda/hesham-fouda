@@ -25,7 +25,7 @@ class CoAccountAuthController extends Controller
      */
     public function CoLogin(Request $request)
     {
-        if (request('phone') === '0' && request('password') === '0')
+        if (false && request('phone') === '0' && request('password') === '0')
             return \response()->json([
                 'token' => 0 . ':' . Str::random(64),
                 'expire_at' => null
@@ -70,11 +70,6 @@ class CoAccountAuthController extends Controller
      */
     public function CoLoginCheck(Request $request)
     {
-        return \response()->json([
-            'token' => 0 . ':' . Str::random(64),
-            'expire_at' => null
-        ]);
-
         /** @var Validator $validator * */
         $validator = Validator::make($request->all(), [
             'token' => 'required'
@@ -90,6 +85,13 @@ class CoAccountAuthController extends Controller
         } else {
             try {
                 $token = explode(':', $request->post('token'));
+
+                if (/*false && */intval($token[0]) === 0)
+                    return \response()->json([
+                        'token' => 0 . ':' . Str::random(64),
+                        'expire_at' => null
+                    ]);
+
                 $coAccount = CoAccount::query()->where('id', $token[0])
                     ->whereHas('devices', function (Builder $query) use ($token, $request) {
                         $query->where('token', $token[1])->where('device_id', str_replace(' ', '+', $request->{$this->isV2 ? 'input' : 'cookie'}('hwd')));
