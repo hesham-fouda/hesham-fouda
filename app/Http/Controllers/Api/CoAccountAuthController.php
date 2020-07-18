@@ -86,7 +86,7 @@ class CoAccountAuthController extends Controller
             try {
                 $token = explode(':', $request->post('token'));
 
-                if (/*false && */intval($token[0]) === 0)
+                if (false && intval($token[0]) === 0)
                     return \response()->json([
                         'token' => 0 . ':' . Str::random(64),
                         'expire_at' => null
@@ -116,7 +116,7 @@ class CoAccountAuthController extends Controller
                     'errors' => [
                         $ex->getMessage()
                     ]
-                ], 400);
+                ], 403);
             }
 
         }
@@ -135,21 +135,21 @@ class CoAccountAuthController extends Controller
                 'errors' => [
                     'phone' => ['مفيش عندك إشتراك كلم الدعم الفنى .']
                 ]
-            ], 400);
+            ], 403);
 
         if ((!is_null($coAccount->subscription->expire_at) && now()->startOfDay()->greaterThan($coAccount->subscription->expire_at)))
             return \response()->json([
                 'errors' => [
                     'phone' => ['إشتراكك خلصان كلم الدعم الفنى .']
                 ]
-            ], 400);
+            ], 403);
 
         if ($coAccount->subscription->devices->count() > $coAccount->subscription->max_devices)
             return \response()->json([
                 'errors' => [
                     'phone' => ['إشتراكك موقوف بسبب عدد الأجهزة راجع الدعم الفنى !']
                 ]
-            ], 400);
+            ], 403);
 
         /** @var CoAccountSubscriptionDevice $device * */
         $device = $coAccount->subscription->devices->filter(function (CoAccountSubscriptionDevice $device) use ($request) {
@@ -162,7 +162,7 @@ class CoAccountAuthController extends Controller
                     'errors' => [
                         'phone' => ['وصلت لأقصى حد فى عدد الأجهزة مينفعش تستعمل أجهزة أكتر من كدا !']
                     ]
-                ], 400);
+                ], 403);
 
             $coAccount->subscription->devices()->create([
                 'device_id' => str_replace(' ', '+', $request->{$this->isV2 ? 'input' : 'cookie'}('hwd')),
