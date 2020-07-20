@@ -51,7 +51,7 @@ class AccountController extends Controller
      */
     public function view(Request $request, CoAccount $CoAccount)
     {
-        $devices = $CoAccount->subscription ? $CoAccount->subscription->devices()->orderBy('id')->orderBy('deleted_at')
+        $devices = $CoAccount->subscription ? $CoAccount->subscription->devices()->orderBy('deleted_at')->orderBy('id')
             ->withTrashed()->get() : collect([]);
         return view('co_accounts.account.view', [
             'devices' => $devices,
