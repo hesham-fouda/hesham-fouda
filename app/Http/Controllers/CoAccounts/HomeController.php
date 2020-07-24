@@ -25,7 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $accounts = CoAccount::query()->with('devices', 'subscription')->get();
+        $accounts = CoAccount::query()->orderBy('id')->with('devices', 'subscription')->get();
         return view('co_accounts.home', compact([ 'accounts' ]));
     }
 }
