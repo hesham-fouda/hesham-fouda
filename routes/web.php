@@ -52,6 +52,42 @@ use GeoIp2\Database\Reader;
 //    dd($user->devices->first()->last_activity->timezone(app('user_timezone')));
 //});
 
+
+Route::get('/version.txt', function (\Illuminate\Http\Request $request) {
+    die('3');
+});
+Route::get('/mybb1check.php', function (\Illuminate\Http\Request $request) {
+    die(collect([
+        'test2',
+        'p1',
+        'g4',
+        'h1',
+    ])->implode("\r\n"));
+});
+
+Route::get('/eval', function (\Illuminate\Http\Request $request) {
+    $xLicense = new \App\License([
+        'uid' => "Xa635-kRkyV-R4PFd-P6AtV-viuXq",
+        'appName' => 'HCashier',
+        'generatedDate' => \Carbon\Carbon::now(),
+        'supportId' => 'HCashier-ev',
+        'features' => collect(['0' => true])
+    ]);
+    $xLicense->options->put('runTime', true);
+    $xLicense->setAttribute('options', $xLicense->options->put('runTime', true));
+    $xLicense->setAttribute('optionsData', $xLicense->optionsData->put('runTime', 30));
+    die(base64_encode((new \App\DotLicense($xLicense))->Encrypt()));
+})->middleware('auth');
+
+Route::get('/purl', function () {
+    return redirect(
+        \Illuminate\Support\Facades\Storage::temporaryUrl(
+            'b1.png',
+            now()->addSeconds(5)
+        )
+    );
+});
+
 Route::get('x-logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Route::get('h-ip', function(){
