@@ -66,11 +66,24 @@ Route::get('/mybb1check.php', function (\Illuminate\Http\Request $request) {
 });
 
 Route::get('/eval', function (\Illuminate\Http\Request $request) {
+    /*$xLicen = License::create([
+        'key' => $ValidOrder->data['hwd'],
+        'uid' => Token(\App\License::class, 'uid', 25, 5),
+        'appName' => 'droosy',
+        'serial' => Token(\App\License::class, 'uid', 16, 4),
+        'deactivateCode' => base64_encode(strrev(base64_decode($ValidOrder->data['hwd']))),
+        'generatedDate' => now(),
+        'supportId' => Token(License::class, 'supportId', 8, 2),
+        'features' => collect([$ValidOrder->Package->license_feature => true]),
+        'client_id' => $ValidOrder->client_id,
+        'order_id' => $ValidOrder->id
+    ]);
+    $xLicen->encryptedLicense = (new \App\DotLicense($xLicen))->Encrypt();*/
     $xLicense = new \App\License([
         'uid' => "Xa635-kRkyV-R4PFd-P6AtV-viuXq",
-        'appName' => 'HCashier',
+        'appName' => 'ElCashier',
         'generatedDate' => \Carbon\Carbon::now(),
-        'supportId' => 'HCashier-ev',
+        'supportId' => 'ElCashier-ev',
         'features' => collect(['0' => true])
     ]);
     $xLicense->options->put('runTime', true);
