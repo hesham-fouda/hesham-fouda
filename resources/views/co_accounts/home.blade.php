@@ -16,8 +16,8 @@
                         <form style="margin-bottom: 30px;" action="{{route('co_accounts.account.store')}}"
                               method="post">
                             {!! csrf_field() !!}
-                            <input type="text" style="display: none;" name="fakeusername">
-                            <input type="password" style="display: none;" name="fakepassword">
+                           {{-- <input type="text" style="display: none;" name="fakeusername" aria-label="fakeusername">
+                            <input type="password" style="display: none;" name="fakepassword" aria-label="fakepassword">--}}
                             <div class="form-group">
                                 <label for="full_name">name</label>
                                 <input type="text" name="full_name" value="{{ old('full_name') }}" autocomplete="off"
@@ -74,33 +74,46 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($accounts as $account)
-                                        <tr>
-                                            <th scope="row">{{$account->id}}</th>
-                                            <td>{{$account->full_name}}</td>
-                                            <td>{{$account->phone}}</td>
-                                            @if($account->subscription)
-                                                <td>{{ implode(' ', [$account->devices->count(), '/', $account->subscription->max_devices]) }}</td>
-                                                <td class="text text-{{(!is_null($account->subscription->expire_at) && now()->startOfDay()->greaterThan($account->subscription->expire_at)) ? 'danger' : 'success'}}">
-                                                    {{
-                                                        $account->subscription->expire_at ?
-                                                        $account->subscription->expire_at->timezone(app('timezone'))->toFormattedDateString()
-                                                        : 'إشتراك مدى الحياة'
-                                                    }}
+                                    @foreach($accounts as $key => $group)
+                                        @foreach($group as $account)
+                                            <tr class="{{ ['valid' => 'text','expired' => 'text-danger','no_subscription' => 'bg-warning',][$key] }}">
+                                                <th scope="row">{{$account->id}}</th>
+                                                <td>{{$account->full_name}}</td>
+                                                <td>{{$account->phone}}</td>
+                                                @if($account->subscription)
+                                                    <td>{{ implode(' ', [$account->devices->count(), '/', $account->subscription->max_devices]) }}</td>
+
+                                                    @switch($key)
+                                                        @case('valid')
+                                                        <td class="text text-success">
+                                                            {{
+                                                                $account->subscription->expire_at ?
+                                                                $account->subscription->expire_at->timezone(app('timezone'))->toFormattedDateString()
+                                                                : 'إشتراك مدى الحياة'
+                                                            }}
+                                                        </td>
+                                                        @break
+                                                        @case('expired')
+                                                        <td>
+                                                            {{ $account->subscription->expire_at->timezone(app('timezone'))->toFormattedDateString() }}
+                                                        </td>
+                                                        @break
+                                                    @endswitch
+                                                    @php($last_activity = $account->subscription->devices->count() > 0 ? $account->subscription->devices->max('last_activity') : null)
+                                                    <td class="text text-{{(!is_null($last_activity) && now()->addMinutes(-13)->greaterThan($last_activity)) ? 'danger' : 'success'}}">
+                                                        {{ $last_activity ?
+                                                        $last_activity->timezone(app('timezone'))->toDayDateTimeString() :
+                                                        'لا يوجد نشاط' }}
+                                                    </td>
+                                                @else
+                                                    <td colspan="3">لا يوجد إشتراك</td>
+                                                @endif
+                                                <td>
+                                                    <a class="btn btn-primary"
+                                                       href="{{route('co_accounts.account.view', $account)}}">View</a>
                                                 </td>
-                                                @php($last_activity = $account->subscription->devices->count() > 0 ? $account->subscription->devices->max('last_activity') : null)
-                                                <td class="text text-{{(!is_null($last_activity) && now()->addMinutes(-13)->greaterThan($last_activity)) ? 'danger' : 'success'}}">
-                                                    {{ $last_activity ?
-                                                    $last_activity->timezone(app('timezone'))->toDayDateTimeString() :
-                                                    'لا يوجد نشاط' }}
-                                                </td>
-                                            @else
-                                                <td colspan="3">لا يوجد إشتراك</td>
-                                            @endif
-                                            <td>
-                                                <a class="btn btn-primary" href="{{route('co_accounts.account.view', $account)}}">View</a>
-                                            </td>
-                                        </tr>
+                                            </tr>
+                                        @endforeach
                                     @endforeach
                                     </tbody>
                                 </table>

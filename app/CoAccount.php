@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 
@@ -31,7 +33,7 @@ class CoAccount extends Model implements \OwenIt\Auditing\Contracts\Auditable
     protected $hidden = ['password'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
     public function subscription()
     {
@@ -39,7 +41,7 @@ class CoAccount extends Model implements \OwenIt\Auditing\Contracts\Auditable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return HasManyThrough
      */
     public function devices()
     {

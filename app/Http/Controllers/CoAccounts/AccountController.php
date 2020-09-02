@@ -7,6 +7,9 @@ use App\CoAccountSubscription;
 use App\CoAccountSubscriptionDevice;
 use App\CoAccountSubscriptionLogger;
 use App\Http\Controllers\Controller;
+use Exception;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -28,7 +31,7 @@ class AccountController extends Controller
      * Show the application dashboard.
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
@@ -47,7 +50,7 @@ class AccountController extends Controller
      *
      * @param Request $request
      * @param CoAccount $CoAccount
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return Renderable
      */
     public function view(Request $request, CoAccount $CoAccount)
     {
@@ -64,7 +67,7 @@ class AccountController extends Controller
      *
      * @param Request $request
      * @param CoAccount $CoAccount
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return RedirectResponse
      */
     public function subscriptionStore(Request $request, CoAccount $CoAccount)
     {
@@ -113,8 +116,8 @@ class AccountController extends Controller
      *
      * @param Request $request
      * @param CoAccount $CoAccount
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function subscriptionDelete(Request $request, CoAccount $CoAccount)
     {
@@ -136,7 +139,7 @@ class AccountController extends Controller
      *
      * @param Request $request
      * @param CoAccount $CoAccount
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return RedirectResponse
      */
     public function subscriptionUpdate(Request $request, CoAccount $CoAccount)
     {
@@ -209,8 +212,8 @@ class AccountController extends Controller
      * @param CoAccount $CoAccount
      * @param CoAccountSubscription $CoAccountSubscription
      * @param CoAccountSubscriptionDevice $CoAccountSubscriptionDevice
-     * @return \Illuminate\Contracts\Support\Renderable
-     * @throws \Exception
+     * @return RedirectResponse
+     * @throws Exception
      */
     public function subscriptionDeviceDelete(Request $request, CoAccount $CoAccount,
                                              CoAccountSubscription $CoAccountSubscription,
