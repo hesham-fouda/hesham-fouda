@@ -19,9 +19,10 @@ use OwenIt\Auditing\Auditable;
  * @property array|null ips
  * @property Carbon last_activity
  */
-class CoAccountSubscriptionDevice extends Model implements \OwenIt\Auditing\Contracts\Auditable
+class CoAccountSubscriptionDevice extends Model /*implements \OwenIt\Auditing\Contracts\Auditable*/
 {
-    use SoftDeletes, Auditable;
+    use SoftDeletes;
+    ///use Auditable;
 
     protected $auditExclude = ['last_activity', 'ips', 'token'];
 
