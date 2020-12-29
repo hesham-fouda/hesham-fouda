@@ -23,6 +23,15 @@ class CoAccountSubscription extends Model implements \OwenIt\Auditing\Contracts\
 {
     use SoftDeletes, Auditable;
 
+    /**
+     * Auditable events.
+     *
+     * @var array
+     */
+    protected $auditEvents = [
+        'updated',
+    ];
+
     protected $fillable = [ 'account_id', 'max_devices', 'start_at', 'expire_at' ];
 
     protected $casts = [

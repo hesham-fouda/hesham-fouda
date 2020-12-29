@@ -22,6 +22,16 @@ use OwenIt\Auditing\Auditable;
 class CoAccount extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
     use SoftDeletes, Auditable;
+
+    /**
+     * Auditable events.
+     *
+     * @var array
+     */
+    protected $auditEvents = [
+        'updated',
+    ];
+
     /**
      * @var array
      */
