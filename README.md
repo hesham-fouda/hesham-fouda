@@ -1,7 +1,7 @@
 <h1 align="center">Hi 👋, I'm Hesham Fouda</h1>
 <h3 align="center">A passionate backend developer from Egypt</h3>
 
-<p align="left"> <img src="https://github.etchfoda.com/?username=etchfoda&label=Profile%20views&color=0e75b6&style=flat" alt="etchfoda" /> </p>
+<p align="left"> <img src="https://github.etchfoda.com/?username=hesham-fouda&label=Profile%20views&color=0e75b6&style=flat" alt="hesham-fouda" /> </p>
 
 - 💬 Ask me about **PHP | Flutter | C# and .Net**
 
