@@ -55,6 +55,7 @@
 <img src="https://github-readme-streak-stats.herokuapp.com/?user=hesham-fouda&theme=tokyonight" alt="hesham-fouda streak stats" />
 </p>
 
+<h3 align="left">📈 Contribution Graph:</h3>
 <p align="center">
-<img src="https://github-profile-trophy.vercel.app/?username=hesham-fouda&theme=tokyonight&no-frame=true&margin-w=8&row=1" alt="hesham-fouda trophies" />
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=hesham-fouda&theme=tokyo-night&hide_border=true&area=true" alt="hesham-fouda activity graph" />
 </p>
